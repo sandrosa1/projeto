@@ -10,31 +10,67 @@ use \App\Session\Srv\LoginUser as SessionSrvLoginUser;
 
 class Login extends Page{
 
-
+    /**
+     * Guardo os erro da validaçao
+     *
+     * @var array
+     */
     private $erro=[];
 
+    /**
+     * Instancia de login
+     *
+     * @var object
+     */
     private $login;
 
+    /**
+     * Guarda a quantidade de tentativas de login
+     *
+     * @var integer
+     */
     private $tentativas;
 
+    /**
+     * Instancia da sessão
+     *
+     * @var object
+     */
+    private $session;
+
     
-   
+    /**
+     * Construtor que inicia as Instancias
+     */
     public function __construct()
     {
-        $this->login= new EntityCustomer();
+        $this->login = new EntityCustomer();
+        $this->session = new SessionSrvLoginUser();
     }
+
+    /**
+     * Retorna o erro
+     *
+     * @return array
+     */
     public function getErro()
     {
         return $this->erro;
     }
 
-    
+    /**
+     * Guardo 0 erro no array
+     *
+     * @param array $erro
+     * @return void
+     */
     public function setErro($erro)
     {
         array_push($this->erro,$erro);
     }
 
-      /**
+
+    /**
      * Validar se os campos desejados foram preenchidos
      *
      * @param Post $par
@@ -100,8 +136,11 @@ class Login extends Page{
         }
     }
 
-
-      #Validação das tentativas
+    /**
+     * Validação das tentativas
+     *
+     * @return boolean
+     */
     public function validateAttemptLogin()
     {
         if($this->login->countAttempt() >= 5){
@@ -114,7 +153,12 @@ class Login extends Page{
         }
     }
 
-    #Método de validação de confirmação de email
+    /**
+     *Método de validação de confirmação de email
+     *
+     * @param string $email
+     * @return boolean
+     */
     public function validateUserActive($email)
     {
         $customer=$this->login->getDataUser($email);
@@ -136,46 +180,15 @@ class Login extends Page{
         }
     }
 
-       #Validação final do login
-       public function validateFinalLogin($email)
-       {
-          
-       }
-  
-  
-
-  
-
-
     /**
-     * Método responsável por retornar a rederização da paǵina de login
+     * #Verificar se o captcha está correto
      *
-     * @param Request $request
-     * @param string $errorMessager
-     * @return string
+     * @param string $captcha
+     * @param float $score
+     * @return void
      */
-    public static function getLogin($request) {
-
-      
-        $content = View::render('srv/login',[
-        
-        ]);
-
-        //Retona a página completa
-         return parent::getPage('SRV - Login',$content);
-       
-    }
-
-    // /**
-    //  * #Verificar se o captcha está correto
-    //  *
-    //  * @param string $captcha
-    //  * @param float $score
-    //  * @return void
-    //  */
     public function validateCaptcha($captcha,$score=0.5)
     {
-      
         $secretkey = getenv('SECRETKEY');
       
         $return=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretkey}&response={$captcha}");
@@ -189,21 +202,33 @@ class Login extends Page{
     }
 
 
-      #Verificação da password digitada com o hash no banco de dados
-      public function validateSenha($email,$password)
-      {
-           $hash = new PasswordHash();
-          if($hash->verifyHashCustomer($email,$password)){
+    /**
+     * Verificação da password digitada com o hash no banco de dados
+     *
+     * @param string $email
+     * @param string $password
+     * @return boolean
+     */
+    public function validateSenha($email,$password)
+    {
+        $hash = new PasswordHash();
+        if($hash->verifyHashCustomer($email,$password)){
+            return true;
 
-              return true;
-          }else{
-              $this->setErro("Usuário ou Senha Inválidos!");
+        }else{
 
-              return false;
-          }
-      }
+            $this->setErro("Usuário ou Senha Inválidos!");
+            return false;
+        }
+    }
 
 
+    /**
+     * Metódo responsavel por retonar o erro para o cliente
+     *
+     * @param objetc $validate
+     * @return void
+     */
     private static function responseError($validate){
 
         $validate->login->insertAttempt();
@@ -216,8 +241,6 @@ class Login extends Page{
         return json_encode($arrResponse);
     }
 
-
-
     /**
      * Método resposavel por definir o login do usuario
      *
@@ -226,7 +249,6 @@ class Login extends Page{
      */
     public static function setLogin($request){
 
- 
         $dadosLogin = [];
         $postVars = $request->getPostVars();
         $dadosLogin[0] = $email               = $postVars['email'] ?? '';
@@ -251,10 +273,11 @@ class Login extends Page{
 
             return self:: responseError($validate);
         }
-        // if(!$validate->validateCaptcha($gRecaptchaResponse)){
+        
+        if(!$validate->validateCaptcha($gRecaptchaResponse)){
 
-        //     return self:: responseError($validate);
-        // }
+            return self:: responseError($validate);
+        }
 
         if(!$validate->validateUserActive($email)){
 
@@ -276,46 +299,18 @@ class Login extends Page{
 
         }else{
             $validate->login->deleteAttempt();
-            //$validate->session->setSessions($email);
+            $validate->session->login($email);
             $arrResponse=[
                "retorno" => 'success',
                "page" => 'areaRestrita',
                "tentativas"   => $validate->tentativas
            ];
-           echo '<pre>';
-           print_r($arrResponse);
-           echo '</pre>';
-           exit;
+         
         }
 
-        
-        //return json_encode($arrResponse);
-
-        
-        // //Busca usuário pelo email
-        // $objRoot = Customer::getCustomerByEmail($email);
-        
-           
-        // if (!$objRoot instanceof Root){
-        //     return self::getLogin($request,  'Dados Inválidos');
-        // }
-       
-       
-
-        //Validado password e usuário
-        // if(!password_verify($password,$objRoot->password) or ($userName != $objRoot->userName)){
-        //     return self::getLogin($request,  'Dados Inválidos2');
-
-        // }
-
-        // //Cria a sessão de login
-        // SessionSrvLoginUser::login($objRoot);
-
-        
-        // //Redireciona o usuário para a home do admin
-        // $request->getRouter()->redirect('/srv');
+        return json_encode($arrResponse);
     }
-
+    
     /**
      * Método reponsável por delogar o usuário
      *
@@ -331,4 +326,26 @@ class Login extends Page{
         $request->getRouter()->redirect('/srv/login');
     }
 
+    /**
+     * Método responsável por retornar a rederização da paǵina de login
+     *
+     * @param Request $request
+     * @param string $errorMessager
+     * @return string
+     */
+    public static function getLogin($request) {
+
+      
+        $content = View::render('srv/login',[
+        
+        ]);
+
+        //Retona a página completa
+         return parent::getPage('SRV - Login',$content);
+       
+    }
+
+
+
+    
 }

@@ -2,7 +2,7 @@
 
 namespace App\Session\Srv;
 
-use \App\Session\Sessions;
+use \App\Session\Session;
 
 class LoginUser{
 
@@ -11,8 +11,28 @@ class LoginUser{
 
     public function __construct()
     {
-        $session = new Sessions();
+        $this->session = new Session();
     }
+
+       /**
+     * Get the value of session
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * Set the value of session
+     */
+    public function setSession($session): self
+    {
+        $this->session = $session;
+
+        return $this;
+    }
+
+    
 
     /**
      * Método responsável por iniciar a sessão
@@ -35,7 +55,9 @@ class LoginUser{
      */
     public function login($email){
 
-        return $this->session->setSessions($email);
+        //$session = new Session();
+
+        return $this->getSession()->setSessions($email);
 
     }
 
@@ -47,22 +69,18 @@ class LoginUser{
         return isset($_SESSION['srv']['user']['idUser']);
     } 
 
-
     /**
      * Método responsável por executar o logout do adminitrador
      *
      * @return boolean
      */
-    public static function logout(){
+    public static  function logout(){
 
-        //Inicia a sessão
-        self::init();
 
-        //Destroi a sessão
-       unset( $_SESSION['srv']['user']);
-
-       return true;
+     return Session::destructSessions();
 
     }
 
+
+ 
 }

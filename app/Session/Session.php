@@ -4,7 +4,7 @@ namespace App\Session;
 use App\Model\Entity\Customer\Customer;
 use App\Traits\TraitGetIp;
 
-class Sessions{
+class Session{
 
     private $login;
     private $timeSession = 1200;
@@ -52,8 +52,10 @@ class Sessions{
     #Verificar a integridade da sessão
     public function verifyIdSessions()
     {
+
         if(!isset($_SESSION['canary'])){
             $this->setSessionCanary();
+            
         }
     
         if($_SESSION['canary']['IP'] !== TraitGetIp::getUserIp()){
@@ -68,7 +70,7 @@ class Sessions{
     }
 
     #Destruir as sessions existentes
-    public function destructSessions()
+    public static function destructSessions()
     {
         foreach (array_keys($_SESSION) as $key) {
             unset($_SESSION[$key]);
@@ -78,10 +80,11 @@ class Sessions{
     #Setar as sessões do nosso sistema
     public function setSessions($email)
     {
+       
         $this->verifyIdSessions();
         $_SESSION["login"]     = true;
         $_SESSION["time"]      = time();
-        $_SESSION["name"]      = $this->login->getDataUser($email)['data']['nome'];
+        $_SESSION["name"]      = $this->login->getDataUser($email)['data']['name'];
         $_SESSION["email"]     = $this->login->getDataUser($email)['data']['email'];
         $_SESSION["permition"] = $this->login->getDataUser($email)['data']['permissoes'];
 
@@ -90,6 +93,7 @@ class Sessions{
     #Validar as páginas internas do sistema
     public function verifyInsideSession()
     {
+
         $this->verifyIdSessions();
         if(!isset($_SESSION['login']) || !isset($_SESSION['permition']) || !isset($_SESSION['canary'])){
             $this->destructSessions();

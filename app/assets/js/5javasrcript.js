@@ -1,7 +1,7 @@
 //----------------Mudar par o dominio
 
 const urlCadastro = 'cars7.1/cadastro';
-const urlLogin = 'cars7.1/controllers/controllerLogin';
+const urlLogin = 'cars7.1/srv/login';
 //Pega o local 
 function getRoot(url)
 {
@@ -101,32 +101,32 @@ $("#formCadastro").on("submit",function(event){
 
 
 //Ajax do formulário de login
-// $("#formLogin").on("submit",function(event){
-//     event.preventDefault();
-//     var dados=$(this).serialize();
+$("#formLogin").on("submit",function(event){
+    event.preventDefault();
+    var dados=$(this).serialize();
 
-//     $.ajax({
-//        url: getRoot(urlLogin),
-//         type: 'post',
-//         dataType: 'json',
-//         data: dados,
-//         success: function (response) {
-//           if(response.retorno == 'success'){
-//               window.location.href = response.page;
-//           }else{
-//             //   getCaptcha();
-//               if(response.tentativas == true){
-//                 $('.loginFormulario').hide();
-//               }
-//               $('.resultadoForm').empty();
-//               $.each(response.erros, function(key, value){
-//                   $('.resultadoForm').append(value + '<br>')
-//               })
-//             }
+    $.ajax({
+       url: getRoot(urlLogin),
+        type: 'post',
+        dataType: 'json',
+        data: dados,
+        success: function (response) {
+          if(response.retorno == 'success'){
+              window.location.href = response.page;
+          }else{
+            //   getCaptcha();
+              if(response.tentativas == true){
+                $('.loginFormulario').hide();
+              }
+              $('.resultadoForm').empty();
+              $.each(response.erros, function(key, value){
+                  $('.resultadoForm').append(value + '<br>')
+              })
+            }
 
-//         }
-//     });
-// });
+        }
+    });
+});
 
 //CapsLock
 // $("#senha").keypress(function(e){
