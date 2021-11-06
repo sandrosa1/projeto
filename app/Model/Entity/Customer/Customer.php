@@ -105,6 +105,11 @@ class Customer{
     private $dateNow;
     
 
+    public function __construct()
+    {
+        $this->trait = TraitGetIp::getUserIp();
+        $this->dateNow = date("Y-m-d H:i:s");
+    }
     /**
      * Método responsável por inserir uma tentativa de login de cliente
      *
@@ -112,13 +117,12 @@ class Customer{
      */
     public function insertAttempt(){
 
-        $this->trait = TraitGetIp::getUserIp();
-        $this->dateNow = date("Y-m-d H:i:s");
 
         if($this->countAttempt() < 5){
+           
             $this->id = (new Database('attempt'))->insert([
-                'trait'        => $this->trait, 
-                'dateNow'      => $this->dateNow,
+                'ip'       => $this->trait, 
+                'date'  => $this->dateNow,
              
             ]);
         }
@@ -141,7 +145,9 @@ class Customer{
     #Conta as tentativas
     public function countAttempt()
     {
-        $b = (new Database('attempt'))->select('trait = "'.$this->trait.'"');
+
+        $b = (new Database('attempt'))->select('ip = "'.$this->trait.'"');
+    
         $r=0;
         while($f=$b->fetch(\PDO::FETCH_ASSOC)){
             if(strtotime($f["date"]) > strtotime($this->dateNow)-1200){
@@ -155,7 +161,7 @@ class Customer{
     #Deleta as tentativas
     public function deleteAttempt()
     {
-        return (new Database('attempt'))->delete('trait = '.$this->trait);
+        return (new Database('attempt'))->delete('ip = "'.$this->trait.'"');
         
     }
 
@@ -271,13 +277,6 @@ class Customer{
         return(new Database('customer'))->select($where, $order, $limit, $fields);
     }
 
-    public function __construct()
-    {
-        
-    }
   
    
-
- 
-
 }

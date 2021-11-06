@@ -12,8 +12,17 @@ class Login extends Page{
 
 
     private $erro=[];
+
+    private $login;
+
+    private $tentativas;
+
     
    
+    public function __construct()
+    {
+        $this->login= new EntityCustomer();
+    }
     public function getErro()
     {
         return $this->erro;
@@ -50,8 +59,8 @@ class Login extends Page{
      /**
      *  Validação se o dado é um email
      *
-     * @param String $par
-     * @return Boolean
+     * @param string $par
+     * @return boolean
      */
     public function validateEmail($par)
     {
@@ -63,44 +72,7 @@ class Login extends Page{
         }
     }
 
-      #Validação das tentativas
-      public function validateAttemptLogin()
-      {
-          if($this->login->countAttempt() >= 5){
-              $this->setErro("Você realizou mais de 5 tentativas!");
-              $this->tentativas = true;
-              return false;
-          }else{
-              $this->tentativas = false;
-              return true;
-          }
-      }
-
-           #Método de validação de confirmação de email
-    public function validateUserActive($email)
-    {
-        $user=$this->login->getDataUser($email);
-        if($user["data"]["status"] == "confirmation"){
-            if(strtotime($user["data"]["dataCriacao"])<= strtotime(date("Y-m-d H:i:s"))-432000){
-                $this->setErro("Ative seu cadastro pelo link do email");
-                return false;
-            }else{
-                return true;
-            }
-        }else{
-            return true;
-        }
-    }
-
-       #Validação final do login
-       public function validateFinalLogin($email)
-       {
-          
-       }
-  
-  
-
-      /**
+    /**
      * #Validar se o email existe no banco de dados (action null para cadastro)
      *
      * @param string $email
@@ -109,7 +81,7 @@ class Login extends Page{
      */
     public function validateIssetEmail($email,$action=null)
     {
-        $userEmail= EntityCustomer::getCustomerByEmail($email);
+        $userEmail = EntityCustomer::getCustomerByEmail($email);
 
         if($action==null){
             if($userEmail > 0){
@@ -128,6 +100,51 @@ class Login extends Page{
         }
     }
 
+
+      #Validação das tentativas
+    public function validateAttemptLogin()
+    {
+        if($this->login->countAttempt() >= 5){
+            $this->setErro("Você realizou mais de 5 tentativas!");
+            $this->tentativas = true;
+            return false;
+        }else{
+            $this->tentativas = false;
+            return true;
+        }
+    }
+
+    #Método de validação de confirmação de email
+    public function validateUserActive($email)
+    {
+        $customer=$this->login->getDataUser($email);
+
+        if($customer["data"]["status"] == "confirmation"){
+
+            if(strtotime($customer["data"]["dataCriacao"])<= strtotime(date("Y-m-d H:i:s"))-432000){
+
+                $this->setErro("Ative seu cadastro pelo link do email");
+
+                return false;
+            }else{
+
+                return true;
+            }
+        }else{
+
+            return true;
+        }
+    }
+
+       #Validação final do login
+       public function validateFinalLogin($email)
+       {
+          
+       }
+  
+  
+
+  
 
 
     /**
@@ -177,12 +194,28 @@ class Login extends Page{
       {
            $hash = new PasswordHash();
           if($hash->verifyHashCustomer($email,$password)){
+
               return true;
           }else{
               $this->setErro("Usuário ou Senha Inválidos!");
+
               return false;
           }
       }
+
+
+    private static function responseError($validate){
+
+        $validate->login->insertAttempt();
+        $arrResponse=[
+            "retorno" => "erro",
+            "erros"   => $validate->getErro(),
+            "tentativas" => $validate->tentativas
+        ];
+
+        return json_encode($arrResponse);
+    }
+
 
 
     /**
@@ -200,41 +233,49 @@ class Login extends Page{
         $dadosLogin[1] = $password            = $postVars['password'] ?? '';
         $dadosLogin[2] = $gRecaptchaResponse  = $postVars['g-recaptcha-response'] ?? '';
 
-        // echo '<pre>';
-        // print_r("Login");
-        // echo '</pre>';
-        // echo '<pre>';
-        // print_r($password);
-        // echo '</pre>';
-        // exit;
-
         $validate = new Login();
 
-        $validate->validateFields($dadosLogin);
-        $validate->validateEmail($email);
-        $validate->validateIssetEmail($email,"login");
-        $validate->validateSenha($email,$password);
-        //$validate->validateCaptcha($gRecaptchaResponse);
-        //$validate->validateUserActive($email);
-       // $validate->validateAttemptLogin();
+        if(!$validate->validateFields($dadosLogin))
+        {
+            return self:: responseError($validate);
+        }
+        if(!$validate->validateEmail($email)){
 
-       echo '<pre>';
-       print_r($validate->getErro());
-       echo '</pre>';
-       exit;
+            return self:: responseError($validate);
+        }
+        if(!$validate->validateIssetEmail($email,"login")){
+
+            return self:: responseError($validate);
+        }
+        if(!$validate->validateSenha($email,$password)){
+
+            return self:: responseError($validate);
+        }
+        // if(!$validate->validateCaptcha($gRecaptchaResponse)){
+
+        //     return self:: responseError($validate);
+        // }
+
+        if(!$validate->validateUserActive($email)){
+
+            return self:: responseError($validate);
+        }
+        if(!$validate->validateAttemptLogin()){
+
+            return self:: responseError($validate);
+        }
+       
+       
         if(count($validate->getErro()) >0){
-            //$validate->login->insertAttempt();
+            $validate->login->insertAttempt();
             $arrResponse=[
                "retorno" => "erro",
                "erros"   => $validate->getErro(),
                "tentativas" => $validate->tentativas
            ];
-           echo '<pre>';
-           print_r($arrResponse);
-           echo '</pre>';
-           exit;
+
         }else{
-            //$validate->login->deleteAttempt();
+            $validate->login->deleteAttempt();
             //$validate->session->setSessions($email);
             $arrResponse=[
                "retorno" => 'success',
