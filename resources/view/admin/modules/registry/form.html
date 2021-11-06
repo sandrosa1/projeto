@@ -1,0 +1,60 @@
+<h1>{{title}}</h1>
+
+<p>Preencha todos os dados</p>
+<hr>
+<div class="container-fluid d-flex justify-content-end">
+    
+    <a href="{{URL}}/admin/registry"  >
+        <button type="button" class="btn btn-warning">Voltar</button>
+    </a>
+  
+</div>
+<hr>
+
+<form method="post">
+<div class="container-flex">
+  <div class="row d-flex mb-3">
+    <div class="col-md-3 from-group">
+      <label >Nome</label>
+      <input type="text" name="user" maxlength="30" value="{{user}}" class="form-control" required>
+    </div>
+    <div class="col-md-3 from-group">
+      <label >Telefone</label>
+      <input type="tel" name="phone" maxlength="14" value="{{phone}}" class="form-control" required>
+    </div>
+    <div class="col-md-6 from-group">
+      <label >Email</label>
+      <input type="email" name="email" maxlength="255" value="{{email}}" class="form-control" required>
+    </div>
+  </div>
+
+  <div class="container-flex ">
+    <div class="row d-flex">
+
+      <div class="col-md-3 from-group">
+        <label >Nome Fantásia</label>
+        <input type="text" name="businessName" maxlength="255" value="{{businessName}}" class="form-control" required>
+      </div>
+    
+      <div class="col-md-3 from-group">
+        <label >Senha temporaria 8 digitos</label>
+        <input type="password" name="password" maxlength="8" value="" class="form-control" required>
+      </div>
+
+      <div class="col-md-6 mt-4 from-group d-flex justify-content-end">  
+        <button type="submit"class="btn btn-success" >Enviar</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="container-flex mt-5">
+  <span class="text-center ">{{status}}</span>
+  </div>
+
+
+</div>
+
+</form>
+

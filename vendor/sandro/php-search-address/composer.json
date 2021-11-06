@@ -1,0 +1,21 @@
+{
+    "name": "sandro/php-search-address",
+    "description": "Busca de Endereços online",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Sandro Amancio",
+            "email": "sandro.sa@fatec.sp.gov.br"
+        }
+    ],
+    "autoload": {
+        "psr-4":{
+            "SandroAmancio\\Search\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.0"
+    }
+    
+}

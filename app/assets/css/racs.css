@@ -1,0 +1,46 @@
+:root {
+    /* cores racs */
+    --racs1: #6300ff;
+    --racs2: #00b7ff;
+    --racs3: #8faadc;
+    --racs5: #eee;
+    --racs6: #000;
+    --racs7: rgb(100, 226, 69);
+
+}
+
+.racs-c-1{color: var(--racs1);}
+.racs-c-2{color: var(--racs2);}
+.racs-c-3{color: var(--racs3);}
+.racs-c-4{color: var(--racs4);}
+.racs-c-5{color: var(--racs5);}
+.racs-c-6{color: var(--racs6);}
+.racs-c-7{color: var(--racs7);}
+
+.racs-bkg-1{background-color: var(--racs1);}
+.racs-bkg-2{background-color: var(--racs2);}
+.racs-bkg-3{background-color: var(--racs3);}
+.racs-bkg-4{background-color: var(--racs4);}
+.racs-bkg-5{background-color: var(--racs5);}
+.racs-bkg-6{background-color: var(--racs6);}
+.racs-bkg-7{background-color: var(--racs7);}
+
+
+.nav-racs{ background-color: var(--racs3);}
+
+.home-container{ height: 100vh;}
+.cadastro-cliente{width: 80%;}
+.card{ min-width: 200px;}
+.footer-racs{background-color: var(--racs3);}
+
+.text-color-racs1{color: var(--racs1);}
+.text-color-racs2{color: var(--racs2);}
+.text-color-racs3{color: var(--racs3);}
+.text-color-racs4{color: var(--racs4);}
+.text-color-racs5{color: var(--racs5);}
+
+
+
+/* input[type='email'],input[type='password'],input[type='text']{ margin: 15px 0; border: 1px solid #bbb; border-radius: 2px; font-size: 16px; padding: 0 10px; }
+input[type='submit']{ width: 30%; background: #025158; font-weight: bold; color: #fff; border: none; border-radius: 2px; cursor:pointer; }
+input[type='submit']:hover{ opacity: 0.8; } */

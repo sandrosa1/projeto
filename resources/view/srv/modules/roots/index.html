@@ -1,0 +1,38 @@
+<h1>Cadastrar novo administrador</h1>
+
+<p>Preencha todos os dados</p>
+<hr>
+<div class="container-fluid d-flex justify-content-between">
+    
+    {{pagination}}
+    
+    
+    <a href="{{URL}}/admin/roots/new"  >
+        <button type="button" class="btn btn-success">Cadastrar novo colaborador</button>
+    </a>
+  
+  
+</div>
+<hr>
+
+
+<table class="table table-light table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Nome de usuário</th>
+            <th>Email</th>
+            <th>Tipo</th>
+            <th>Desde</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+     {{lists}}
+    </tbody>
+</table>
+
+<div class="container-fluid mt-5">
+    <span class="text-center">{{status}}</span>
+</div>

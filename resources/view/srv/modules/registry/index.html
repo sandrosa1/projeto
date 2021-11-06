@@ -1,0 +1,38 @@
+<h1>Cadastrar novo cliente</h1>
+
+<p>Preencha todos os dados</p>
+<hr>
+<div class="container-fluid d-flex justify-content-between">
+    
+    {{pagination}}
+    
+    
+    <a href="{{URL}}/admin/registry/new"  >
+        <button type="button" class="btn btn-success">Cadastrar novo cliente</button>
+    </a>
+  
+  
+</div>
+<hr>
+
+
+<table class="table table-light table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Responsavél</th>
+            <th>Nome Fantasia</th>
+            <th>Telefone</th>
+            <th>Email</th>
+            <th>Desde</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+     {{lists}}
+    </tbody>
+</table>
+
+<div class="container-fluid mt-5">
+    <span class="text-center">{{status}}</span>
+</div>

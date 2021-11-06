@@ -1,0 +1,7 @@
+URL=http://localhost/cars3
+DB_HOST=localhosT
+DB_NAME=database
+DB-USER=root
+DB_PASS=pass
+DB_PORT=3306
+MAINTENANCE=false

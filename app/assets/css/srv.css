@@ -1,0 +1,60 @@
+:root {
+    --srv1: #920046;
+    --srv2: #FF3434;
+    --srv3: #0CB664;
+    --srv4: #00812d;
+    --srv5: #FF3434;
+    --srv6: #CCCCCC;
+    --srv7: #E8AA0B;
+    --srv8: #ddd;
+    --srv9: #000;
+  }
+.srv-c-1{color: var(--srv1);}
+.srv-c-2{color: var(--srv2);}
+.srv-c-3{color: var(--srv3);}
+.srv-c-4{color: var(--srv4);}
+.srv-c-5{color: var(--srv5);}
+.srv-c-6{color: var(--srv6);}
+.srv-c-7{color: var(--srv7);}
+.srv-c-8{color: var(--srv8);}
+.srv-c-9{color: var(--srv9);}
+
+.srv-bkg-1{background-color: var(--srv1);}
+.srv-bkg-2{background-color: var(--srv2);}
+.srv-bkg-3{background-color: var(--srv3);}
+.srv-bkg-4{background-color: var(--srv4);}
+.srv-bkg-5{background-color: var(--srv5);}
+.srv-bkg-6{background-color: var(--srv6);}
+.srv-bkg-7{background-color: var(--srv7);}
+.srv-bkg-8{background-color: var(--srv8);}
+.srv-bkg-9{background-color: var(--srv9);}
+
+.card-login{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    opacity: 0.7;
+
+}
+
+.login{
+    width: 400px;
+    height: 300px;
+    padding: 30px;
+
+}
+
+.background-login{
+    position:absolute; 
+    top: 0; left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: url('/cars7.1/img/background-login-1300.jpg') no-repeat; background-size: auto;
+    
+
+
+}

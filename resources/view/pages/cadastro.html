@@ -1,0 +1,67 @@
+<div class="row ">
+  <div class="col l12 hc df">
+    <form class="cadastro-cliente z-depth-1 mt-5 mb-5 p-5 " name="formCadastro" id="formCadastro" method="post">
+      <h1 class="text-color-racs3 center fzc-30">Sistema SRV - São Roque e Você</h1>
+      <h2 class="text-color-racs3 center fzc-20">A maior vitrini digital gratuita.</h2>
+      <h3 class="text-color-racs3 center fzc-20">Cadastre-se para ter acesso ao painel de anúcio</h3>
+      <div class="row">
+        <div class="input-field col s6">
+          <i class="material-icons prefix">account_circle</i>
+          <input placeholder="Nome:" id="fname" type="text" name="name" class="validate">
+          <label for="name">Nome</label>
+        </div>
+        <div class="input-field col s6">
+          <i class="material-icons prefix">fingerprint</i>
+          <input placeholder="CPF:" id="cpf" name="cpf" type="text" class="validate">
+          <label for="cpf">CPF</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">email</i>
+          <input name="email" placeholder="Email:" id="email" type="email" class="validate">
+          <label for="email">Email</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <i class="material-icons prefix">date_range</i>
+          <input name="birthDate" placeholder="Data de Nascimento:" id="birthDate" type="text"
+            class="validate datepicker">
+          <label for="birthDate">Data de nascimento</label>
+        </div>
+        <div class="input-field col s6">
+          <i class="material-icons prefix">phone</i>
+          <input name="phone" placeholder="Telefone:" id="phone" type="tel" class="validate">
+          <label for="phone">Telefone</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <i class="material-icons prefix">vpn_key</i>
+          <input type="password" id="password" name="password" maxlength="12" placeholder="Senha:" class="validate">
+          <label for="password">Senha </label>
+        </div>
+        <div class="input-field col s6">
+          <i class="material-icons prefix">vpn_key</i>
+          <input type="password" id="passwordConf" name="passwordConf" placeholder="Confirmação da Senha:"
+            class="validate">
+          <label for="passwordConf">Confirme a senha</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input class="validate" type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" required>
+        </div>
+        <div class="input-field col s12 hc">
+          <button class="btn waves-effect waves-light #00e676 green accent-3 mt-3" type="submit"
+            value="Cadastrar">Cadastrar
+            <i class="material-icons right">send</i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+    

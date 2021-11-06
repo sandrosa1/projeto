@@ -1,0 +1,20 @@
+{
+    "name": "sandro/php-dot-env",
+    "description": "Carrega variaveis de ambiente",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Sandro Amancio",
+            "email": "sandrosa@fatec.sp.gov.br"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SandroAmancio\\DotEnv\\":"src/"
+        }
+    },
+    "require": {
+        "php": ">=7.0"
+    }
+}
