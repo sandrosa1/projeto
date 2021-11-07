@@ -25,6 +25,10 @@ class ComposerStaticInitc94bdb755fb66f8e464b8baafb5dcaad
             'SandroAmancio\\DotEnv\\' => 21,
             'SandroAmancio\\DatabaseManager\\' => 30,
         ),
+        'P' => 
+        array (
+            'PHPMailer\\PHPMailer\\' => 20,
+        ),
         'M' => 
         array (
             'MatthiasMullie\\PathConverter\\' => 29,
@@ -68,6 +72,10 @@ class ComposerStaticInitc94bdb755fb66f8e464b8baafb5dcaad
         'SandroAmancio\\DatabaseManager\\' => 
         array (
             0 => __DIR__ . '/..' . '/sandro/php-database-manager/src',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'MatthiasMullie\\PathConverter\\' => 
         array (

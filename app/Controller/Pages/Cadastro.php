@@ -6,18 +6,33 @@ use \App\Utils\View;
 use ZxcvbnPhp\Zxcvbn;
 use \App\Model\Entity\Customer\Customer as EntityCustomer;
 use \App\Controller\Password\Password as PasswordHash;
+use \App\Communication\Email;
 
 class Cadastro extends Page{
 
+    /**
+     * Guarda os erros
+     *
+     * @var array
+     */
     private $erro=[];
     
-   
+    /**
+     * Retorna os erros
+     *
+     * @return array
+     */
     public function getErro()
     {
         return $this->erro;
     }
 
-    
+    /**
+     * Guarda o erro no array
+     *
+     * @param string $erro
+     * @return void
+     */
     public function setErro($erro)
     {
         array_push($this->erro,$erro);
@@ -89,7 +104,6 @@ class Cadastro extends Page{
         }
     }
 
-
     /**
      * #Validação se o dado é uma data
      *
@@ -107,8 +121,6 @@ class Cadastro extends Page{
         }
     }
 
-
-    
     //https://gist.github.com/rafael-neri/ab3e58803a08cb4def059fce4e3c0e40
     /**
      * Validação se é um cpf real
@@ -148,6 +160,7 @@ class Cadastro extends Page{
         return true;
 
     }
+
     /**
      * Verificar se a senha é igual a confirmação de senha
      *
@@ -172,20 +185,19 @@ class Cadastro extends Page{
      * @param string $par
      * @return boolean
      */
-    public function validateStrongSenha($senha,$par=null)
+    public function validateStrongSenha($senha)
     {
         $zxcvbn=new Zxcvbn();
         $strength = $zxcvbn->passwordStrength($senha);
         // echo $strength['score'].'<br>';
+        if($strength['score'] >= 3){
 
-        if($par==null){
-            if($strength['score'] >= 3){
-                return true;
-            }else{
-                $this->setErro("Utilize uma senha mais forte!");
-            }
+            return true;
+
         }else{
-            /*login*/
+
+            $this->setErro("Utilize uma senha mais forte!");
+
         }
     }
 
@@ -211,31 +223,44 @@ class Cadastro extends Page{
         }
     }
 
+    /**
+     * Wetódo responsavel por enviar o email de confirmação
+     *
+     * @return boolean
+     */
+    public function ValidateSendEmail($email,$name, $token){
 
-    #Validação final do cadastro
-    public function validateFinalCad($arrVar,$table)
-    {
-        if(count($this->getErro())>0){
-            $arrResponse=[
-                "retorno" => "erro",
-                "erros"   => $this->getErro()
-            ];
-        }else{
-            $arrResponse=[
-                "retorno" => "success",
-                "erros"   => null
-            ];
-            $this->cadastro->insertCad($arrVar);
+        $address = $email;
+        $subject = 'Confirmação de cadastro';
+        $body = "<b>Sejá bem vindo ao São Roque e Vocẽ {$name}.<b><br><br>
+        <b>Para finalizar seu cadastro</b><a href='http://www.racsstudios.com/srv/confirmation?email={$email}&token={$token}'> click aqui</a><br><br>
+        <img src='http://www.racsstudios.com/img/assinatura-racs.jpeg' alt='Logomarca da WEF'>";
+
+        $objEmail = new Email;
+        $sucess = $objEmail->sendEmail($address,$subject,$body);
+
+        if(!$sucess){
+
+            $this->setErro("Problemas no envio de email de confirmação.");
+            return false;
+
         }
-        return json_encode($arrResponse);
-    }
-      
+        return true;
 
+    }
+
+    /**
+     * Metódo responsavel por inserir um novo cliente;
+     *
+     * @param Request $request
+     * @return void
+     */
     public static function insertRegistration($request){ 
     
+        //Recebe as variavei do request
         $postVars = $request->getPostVars();
+        //Intancia um novo cliente
         $objCadastro = new EntityCustomer;
-
 
         $cadastro = []; 
         $cadastro[0] = $objCadastro->name = $postVars['name']; 
@@ -246,13 +271,12 @@ class Cadastro extends Page{
         $cadastro[5] = $postVars['password']; 
         $cadastro[6] = $postVars['passwordConf'];
         $cadastro[7] = $postVars['g-recaptcha-response']; 
+        $cadastro[8] = $objCadastro->token = bin2hex(random_bytes(64));
         $objCadastro->createDate = date('Y-m-d H:i:s');
         $objCadastro->permission = "user";
         $objCadastro->status = "confirmation";
-        $objCadastro->token = bin2hex(random_bytes(64));
-
-
-
+        
+        //Instacia um novo cadastro para validar as informaçoes do cliente
         $validate = new Cadastro();
         $validate->validateFields($cadastro);
         $validate->validateConfSenha($cadastro[5],$cadastro[6]);
@@ -262,12 +286,13 @@ class Cadastro extends Page{
         $validate->validateCPF($cadastro[1]);
         $validate->validateData($cadastro[4]);
         $validate->validateCaptcha($cadastro[7]);
+        $validate->ValidateSendEmail($cadastro[2],$cadastro[0], $cadastro[8]);
 
-
+        //Instacia a classe de senha para criptografala
         $hashPassword = new PasswordHash();
         $objCadastro->password = $hashPassword->passwordHash($cadastro[5]);
 
-
+       
         if(count($validate->getErro()) > 0){
             $arrResponse=[
                 "retorno" => "erro",
@@ -277,7 +302,7 @@ class Cadastro extends Page{
             $arrResponse=[
                 "retorno" => "success",
                 "page"    => "srv/login",
-                "success" => ["Cadastro realizado com sucesso.","Você recebera um email de confimação no email cadastro."]
+                "success" => ["Cadastro realizado com sucesso.","Você recebera um email de confimação no email cadastro.","Verifique na caixa de span ou lixo eletronico."]
             ];
             
             $objCadastro->insertNewCustomer();
@@ -286,21 +311,19 @@ class Cadastro extends Page{
         echo json_encode($arrResponse);
    
     }
+
     /**
-        * Método respónsavel por retornar a view de cadastro de um novo cliente
-        *
-        * @param Request $request
-        * @return string
-        */
+    * Método respónsavel por retornar a view de cadastro de um novo cliente
+    *
+    * @param Request $request
+    * @return string
+    */
     public static function getCadastro($request){
 
         $content = View::render('pages/cadastro',[
-            // 'itens' => self::getCadastroItens($request,$objPagination),
-            // 'pagination' => parent::getPagination($request,$objPagination)
-            
-        ]);
 
-     
+         //Pode coloca itens dinamicos no cadastro
+        ]);
 
         return parent::getPage('Cadastro - RACS',$content );
     }

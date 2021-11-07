@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => 'a51bf12c3fb4499db5286da36322f3c49af22141',
         'name' => 'sandrosa1/backsaoroqueandvoce',
         'dev' => true,
     ),
@@ -46,6 +46,15 @@
             'reference' => 'e7d13b2c7e2f2268e1424aaed02085518afa02d9',
             'dev_requirement' => false,
         ),
+        'phpmailer/phpmailer' => array(
+            'pretty_version' => 'v6.5.1',
+            'version' => '6.5.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpmailer/phpmailer',
+            'aliases' => array(),
+            'reference' => 'dd803df5ad7492e1b40637f7ebd258fee5ca7355',
+            'dev_requirement' => false,
+        ),
         'sandro/php-database-manager' => array(
             'pretty_version' => 'v1.0.0',
             'version' => '1.0.0.0',
@@ -83,12 +92,12 @@
             'dev_requirement' => false,
         ),
         'sandrosa1/backsaoroqueandvoce' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => 'a51bf12c3fb4499db5286da36322f3c49af22141',
             'dev_requirement' => false,
         ),
         'symfony/polyfill-mbstring' => array(

@@ -5,6 +5,7 @@ require __DIR__ .'/../vendor/autoload.php';
 use \App\Utils\View;
 use \SandroAmancio\DotEnv\Environment;
 use SandroAmancio\DatabaseManager\Database;
+use \App\Communication\Email;
 use \App\Http\Middleware\Queue as MiddlewareQueue;
 
 //Carrega variaveis de ambiente
@@ -18,6 +19,16 @@ Database::config(
     getenv('DB_PASS'), 
     getenv('DB_PORT'), 
 );
+
+define('EMAIL_HOST',getenv('EMAIL_HOST'));
+define('EMAIL_USER',getenv('EMAIL_USER'));   
+define('EMAIL_PASS',getenv('EMAIL_PASS')); 
+define('EMAIL_SECURE',getenv('EMAIL_SECURE')); 
+define('EMAIL_PORT',getenv('EMAIL_PORT')); 
+define('EMAIL_CHARSET',getenv('EMAIL_CHARSET')); 
+define('EMAIL_FORM_EMAIL',getenv('EMAIL_FORM_EMAIL')); 
+define('EMAIL_FROM_NAME',getenv('EMAIL_FROM_NAME'));
+
 
 //Defini uma url (Será provisoria)
 define('URL', getenv('URL'));

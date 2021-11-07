@@ -335,13 +335,24 @@ class Login extends Page{
      */
     public static function getLogin($request) {
 
-      
-        $content = View::render('srv/login',[
+        $queryParams = $request->getQueryParams();
         
-        ]);
+        //Status
+        if(isset($queryParams['status'])){
 
+            $content = View::render('srv/login',[
+            
+            ]);
+        }else{
+
+            $content = View::render('srv/login',[
+                'status' => ''
+            ]);
+
+        }
+        
         //Retona a página completa
-         return parent::getPage('SRV - Login',$content);
+        return parent::getPage('SRV - Login',$content);
        
     }
 

@@ -6,6 +6,7 @@ use \SandroAmancio\DatabaseManager\Database;
 
 use App\Traits\TraitGetIp;
 
+
 //CLASSE RESPONSÁVEL PELO CADASTRO DE CLIENTE NO SISTEMA
 
 //RESPONSÁVEL POR UMA INSTÂNCIA DE APP
@@ -157,12 +158,31 @@ class Customer{
         return $r;
     }
 
+    
+
        
     #Deleta as tentativas
     public function deleteAttempt()
     {
         return (new Database('attempt'))->delete('ip = "'.$this->trait.'"');
         
+    }
+
+    public static function getCustomerToken($email){
+
+        return (new Database('confirmation'))->select('email = "'.$email.'"')->fetchObject(self::class);
+    }
+
+    public static function confirmationCad($idUser,$status){
+
+
+        return (new Database('customer'))->update('idUser = '.$idUser,[
+
+            'status'       => $status,
+        ]);
+
+        return true;
+
     }
 
 
@@ -172,7 +192,7 @@ class Customer{
         //Inserio os dados do cliete no banco de dados
         $this->idUser = (new Database('customer'))->insert([
             
-            'name'        => $this->name, 
+            'name'         => $this->name, 
             'cpf'          => $this->cpf, 
             'email'        => $this->email,
             'phone'        => $this->phone,
@@ -190,11 +210,11 @@ class Customer{
             'token'  => $this->token,
            
         ]);
-
         //Sucesso
         return true;
 
     }
+
 
 
     /**
@@ -207,7 +227,7 @@ class Customer{
         //Inserio os dados do cliete no banco de dados
         return (new Database('customer'))->update('idUser = '.$this->idUser,[
 
-            'name'        => $this->name, 
+            'name'         => $this->name, 
             'cpf'          => $this->cpf, 
             'email'        => $this->email,
             'phone'        => $this->phone,
